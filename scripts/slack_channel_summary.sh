@@ -13,20 +13,16 @@ CHANNELS=(
     "C06HW9QMDGA:block-ds-core"
     "C024LVDTA85:block-ds-leads"
     "C056M8HPMJS:block-finops-team"
-    "C05MLG7PXKQ:cash-ds-bie-finplat"
     "C01M8LL6M0S:cash-finplat-announce"
-    "C03NLBTRA5R:cash-finplat-huddles"
     "C08B4SU0HNZ:cash-pds-core"
-    "C04TCLNQDC5:cash-planning-leads"
     "C07JVEUCTJL:finplat-leads"
     "C037B8GFDQX:finplat-pds"
-    "C08JFPZKE86:proj-blockrealtimemetrics"
     "C044J31A7G8:proj-dps-x-block"
 )
 
 # Configuration
 HOURS=24
-OUTPUT_DIR="$HOME/Goose_explore-1/logs/channel_summaries"
+OUTPUT_DIR="$HOME/slack-summarizer/logs/channel_summaries"
 DATE_HEADER=$(date "+%A, %B %d, %Y - %I:%M %p")
 DAILY_DIGEST="$OUTPUT_DIR/daily_channel_digest.txt"
 
