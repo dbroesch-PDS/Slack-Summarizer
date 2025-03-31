@@ -1,0 +1,28 @@
+:newspaper: *DAILY CHANNEL DIGEST*
+:calendar: Monday, March 31, 2025 - 12:01 PM
+:bar_chart: Monitoring 1 channels
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+              *#acquiring-sponsored*              
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+:speech_balloon: *Key Discussions*
+    • :rocket: Push changes have been implemented for Mastercard payment mechanisms, adjusting routing allocations for various transaction types
+    • :chart_with_upwards_trend: Cross River Bank ramp-up initiated, increasing traffic from 10% to 13% across multiple transaction types
+    • :gear: Technical updates made to Mastercard pushes with new splits: Bancorp Direct 61% / NYCE Bancorp 26% / CRB 13% for Instant Cash Out, and Bancorp Direct 10% / NYCE Bancorp 77% / CRB 13% for Merchant Disbursement
+    • :brain: Discussion around GLB 10432.2 mandate regarding name validation requests and DE108 requirements for middle name data
+
+:loudspeaker: *Updates & Announcements*
+    • :green_alert: Major routing change announced for Cross River Ramp, increasing from ~10% to ~20% for V/MC transactions
+    • :mastercard: Mastercard AFT routes updated with new allocation percentages for P2P, Cash In, and Microauths
+    • :memo: New support ticket best practices shared for Mastercard interactions, including proper escalation paths
+    • :bell: Monitoring in place for daily transaction reporting with new unified reporting pipeline ETL deployment
+
+:clipboard: *Action Items*
+    • :eyes: Monitor daily transaction reporting to ensure smooth processing with added Cross River Bank volume
+    • :gear: FinOps to implement changes for pull use cases
+    • :tools: FinPlat to create flags for push changes in Ops Controls
+    • :link: Review and validate name validation requirements for DE61 and DE108 implementations
+    • :hourglass: Track performance metrics for new routing allocations and monitor auth rates
+
