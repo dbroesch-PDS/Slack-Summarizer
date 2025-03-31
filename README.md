@@ -64,6 +64,39 @@ The summary uses various emojis to indicate different types of information:
 
 ## Requirements
 
-- Goose CLI installed and configured
-- Slack access with appropriate permissions
+### Core Requirements
 - Bash shell environment
+- Git (for cloning this repository)
+- Access to Square's Slack workspace
+- Appropriate Slack permissions for channels you want to summarize
+
+### Slack MCP Installation
+
+The Slack MCP (Message Control Protocol) is required for this script to interact with Slack. You can install it using either the GUI or CLI method:
+
+#### GUI Installation (Recommended for Most Users)
+1. Follow the installation guide in the [Goose Slack MCP Setup Document](https://docs.google.com/document/d/1BXDlgcvaFw3nuTx541-oKIN8cilZn9MPztOVpfTDtUE/edit?tab=t.0)
+2. This guide provides step-by-step instructions with screenshots for:
+   - Creating a Slack App
+   - Configuring necessary permissions
+   - Setting up OAuth tokens
+   - Installing the MCP through Goose's GUI
+
+#### CLI Installation (For Advanced Users)
+1. For command-line installation, follow the instructions in the [MCP Slack Repository](https://github.com/squareup/mcp/tree/main/mcp_slack#readme)
+2. This method provides:
+   - Detailed configuration steps
+   - Manual token setup
+   - Advanced customization options
+   - Command-line based installation process
+
+### Post-Installation
+After installing the Slack MCP:
+1. Verify installation by running a test command through Goose
+2. Ensure you have the necessary Slack scopes enabled:
+   - channels:read
+   - channels:history
+   - chat:write
+   - users:read
+   - users:read.email
+3. Configure your authentication tokens in the MCP configuration
