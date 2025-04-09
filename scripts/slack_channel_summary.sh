@@ -11,11 +11,11 @@ declare -a CHANNELS
 CHANNELS=(
     # "C059PJAVBME:acquiring-sponsored"
     "C06HW9QMDGA:block-ds-core"
-    # "C024LVDTA85:block-ds-leads"
+    #"C024LVDTA85:block-ds-leads"
     # "C056M8HPMJS:block-finops-team"
-    # "C01M8LL6M0S:cash-finplat-announce"
-    # "C08B4SU0HNZ:cash-pds-core"
-    "C07JVEUCTJL:finplat-leads"
+    "C01M8LL6M0S:cash-finplat-announce"
+   # "C08B4SU0HNZ:cash-pds-core"
+    "C08KNCL13U5:block-finplat-leads"
     # "C037B8GFDQX:finplat-pds"
     # "C044J31A7G8:proj-dps-x-block"
 )
@@ -68,14 +68,14 @@ create_section_block() {
         \"type\": \"section\",
         \"text\": {
             \"type\": \"mrkdwn\",
-            \"text\": \"*${title}*\" 
+            \"text\": \"*🔹 *${title}* 🔹*\" 
         }
     },
     {
         \"type\": \"section\",
         \"text\": {
             \"type\": \"mrkdwn\",
-            \"text\": \"${content}\"
+            \"text\": \"*${content}*\" 
         }
     }"
 }
@@ -94,7 +94,7 @@ create_header_block() {
         \"type\": \"header\",
         \"text\": {
             \"type\": \"plain_text\",
-            \"text\": \"${text}\",
+            \"text\": \"🔔 *${text}* 🔔\",
             \"emoji\": true
         }
     }"
@@ -170,7 +170,7 @@ Using the slack__post_message tool, send this message to @${USER_EMAIL%@*}:
             "type": "header",
             "text": {
                 "type": "plain_text",
-                "text": "📰 Daily Channel Digest",
+                "text": "🔔 *📰 Daily Channel Digest* 🔔",
                 "emoji": true
             }
         },
@@ -178,14 +178,14 @@ Using the slack__post_message tool, send this message to @${USER_EMAIL%@*}:
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "*📅 ${DATE_HEADER}*"
+                "text": "*📅 *${DATE_HEADER}* *"
             }
         },
         {
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "*📊 Monitoring ${#CHANNELS[@]} channels*"
+                "text": "*📊 *Monitoring ${#CHANNELS[@]} channels* *"
             }
         },
         {
