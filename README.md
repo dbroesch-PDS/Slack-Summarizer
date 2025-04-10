@@ -37,7 +37,12 @@ Slack-Summarizer/
    )
    ```
 
-3. Run the script:
+3. Configure the time window for message summaries (default is 24 hours):
+   ```bash
+   HOURS=24  # Set to 168 for a 7-day window
+   ```
+
+4. Run the script:
    ```bash
    ./scripts/slack_channel_summary.sh
    ```
@@ -53,6 +58,8 @@ Each channel summary includes:
 - **Key Discussions**: 3-4 main topics discussed
 - **Updates & Announcements**: Important updates shared in the channel
 - **Action Items**: Tasks, follow-ups, and pending actions
+
+Note: The script will only include messages from the last 7 days, regardless of the HOURS parameter setting. This ensures that summaries remain relevant and focused on recent activity.
 
 The summary uses various emojis to indicate different types of information:
 - 🚨 `:alert:` for urgent items
