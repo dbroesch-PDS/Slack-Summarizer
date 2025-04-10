@@ -1,0 +1,14 @@
+# Log files
+logs/channel_summaries/*.json
+logs/channel_summaries/*.txt
+logs/*.log
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo 
