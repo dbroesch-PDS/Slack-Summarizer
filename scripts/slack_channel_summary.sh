@@ -109,16 +109,18 @@ generate_channel_summary() {
     echo "Generating summary for #${CHANNEL_NAME} channel..."
     
     # Create the prompt that will generate our summary
-    PROMPT="Using the slack__get_channel_messages tool, get messages from channel $CHANNEL_ID (limit: 100) and create a concise summary of the last 24 hours of activity. Format the response as follows:
+    PROMPT="Using the slack__get_channel_messages tool, get messages from channel $CHANNEL_ID (limit: 100) and create a concise summary of the last $HOURS hours of activity. DO NOT include any messages that are older than 7 days from now, even if the HOURS parameter is larger. If a message is more than 7 days old, ignore it completely. Format the response as follows:
 
 Key Discussions:
-[List 3-4 main topics, one per line, keep each line concise and clear]
+[List 3-4 main topics from messages within the last 7 days only, one per line, keep each line concise and clear]
 
 Updates & Announcements:
-[List important updates, one per line, keep each line concise and clear]
+[List important updates from messages within the last 7 days only, one per line, keep each line concise and clear]
 
 Action Items:
-[List action items, one per line, keep each line concise and clear]"
+[List action items from messages within the last 7 days only, one per line, keep each line concise and clear]
+
+If there are no messages within the last 7 days, state that explicitly in each section."
 
     # Run goose with the prompt and save to temp file
     goose run -t "$PROMPT" > "$TEMP_SUMMARY"
