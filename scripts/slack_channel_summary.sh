@@ -4,7 +4,7 @@
 # Script to generate daily Slack channel summaries and send via Slack DM
 
 # User configuration
-USER_EMAIL="dbroesch@squareup.com"  # Parameterized user email
+USER_SLACK_ID="U043PMG1U1H"  # Parameterized user Slack ID
 
 # Channel configurations - add channels here as "channel_id:channel_name" pairs
 declare -a CHANNELS
@@ -21,28 +21,18 @@ CHANNELS=(
 )
 
 # Configuration
-HOURS=24
+HOURS=24  # Default to 24 hours
 OUTPUT_DIR="$HOME/slack-summarizer/logs/channel_summaries"
 DATE_HEADER=$(date "+%A, %B %d, %Y - %I:%M %p")
 DAILY_DIGEST="$OUTPUT_DIR/daily_channel_digest.json"
 
-# Get user's Slack user ID from their email
-get_user_id() {
-    local USER_ID
-    # First get the user info by email
-    USER_ID=$(goose run -t "Using the slack__get_user_by_email tool, get the Slack user ID for $USER_EMAIL and only return the ID." | grep -o 'U[A-Z0-9]\{8\}')
-    
-    if [ -z "$USER_ID" ]; then
-        echo "Error: Could not find user ID for $USER_EMAIL"
-        return 1
-    fi
-    
-    # Now get the DM channel ID
+# Get user's DM channel ID from their Slack ID
+get_dm_channel_id() {
     local DM_CHANNEL_ID
-    DM_CHANNEL_ID=$(goose run -t "Using the slack__get_my_channels tool, find the direct message channel ID for user $USER_ID and only return the channel ID." | grep -o 'D[A-Z0-9]\{8\}')
+    DM_CHANNEL_ID=$(goose run -t "Using the slack__get_my_channels tool, find the direct message channel ID for user $USER_SLACK_ID and only return the channel ID." | grep -o 'D[A-Z0-9]\{8\}')
     
     if [ -z "$DM_CHANNEL_ID" ]; then
-        echo "Error: Could not find DM channel for user $USER_ID"
+        echo "Error: Could not find DM channel for user $USER_SLACK_ID"
         return 1
     fi
     
@@ -157,14 +147,16 @@ If there are no messages within the last 7 days, state that explicitly in each s
 
 # Function to send digest via Slack DM
 send_digest_to_slack() {
-    local USER_ID=$1
+    local DM_CHANNEL_ID=$1
     local TEMP_CMD=$(mktemp)
+    local HAS_NEW_MESSAGES=$2
     
     echo "Sending digest to Slack..."
     
-    # Create the Slack message command with Block Kit format
-    cat > "$TEMP_CMD" << EOL
-Using the slack__post_message tool, send this message to @${USER_EMAIL%@*}:
+    if [ "$HAS_NEW_MESSAGES" = "0" ]; then
+        # Create a message for no new updates
+        cat > "$TEMP_CMD" << EOL
+Using the slack__post_message tool, send this message to user $USER_SLACK_ID:
 
 {
     "blocks": [
@@ -172,7 +164,49 @@ Using the slack__post_message tool, send this message to @${USER_EMAIL%@*}:
             "type": "header",
             "text": {
                 "type": "plain_text",
-                "text": "🔔 *📰 Daily Channel Digest* 🔔",
+                "text": "🔔 📰 Daily Channel Digest 🔔",
+                "emoji": true
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "*📅 *${DATE_HEADER}* *"
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "*📊 *Monitoring ${#CHANNELS[@]} channels* *"
+            }
+        },
+        {
+            "type": "divider"
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "*✨ No new messages since last summary ✨*"
+            }
+        }
+    ]
+}
+EOL
+    else
+        # Create the Slack message command with Block Kit format for new messages
+        cat > "$TEMP_CMD" << EOL
+Using the slack__post_message tool, send this message to user $USER_SLACK_ID:
+
+{
+    "blocks": [
+        {
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": "🔔 📰 Daily Channel Digest 🔔",
                 "emoji": true
             }
         },
@@ -197,6 +231,7 @@ Using the slack__post_message tool, send this message to @${USER_EMAIL%@*}:
     ]
 }
 EOL
+    fi
     
     # Send the message
     goose run -t "$(cat $TEMP_CMD)"
@@ -212,21 +247,26 @@ mkdir -p "$OUTPUT_DIR"
 # Initialize the digest file with an empty array
 echo "[]" > "$DAILY_DIGEST"
 
+# Track if we found any new messages
+HAS_NEW_MESSAGES=0
+
 # Process each channel
 for channel in "${CHANNELS[@]}"; do
     # Split the channel string into ID and name
     IFS=':' read -r channel_id channel_name <<< "$channel"
-    generate_channel_summary "$channel_id" "$channel_name"
+    if generate_channel_summary "$channel_id" "$channel_name"; then
+        HAS_NEW_MESSAGES=1
+    fi
 done
 
 echo "All channel summaries completed!"
 echo "Daily digest saved to: $DAILY_DIGEST"
 
-# Get user ID and send digest
-USER_ID=$(get_user_id)
-if [ -n "$USER_ID" ]; then
-    send_digest_to_slack "$USER_ID"
-    echo "Digest sent to $USER_EMAIL via Slack"
+# Get DM channel ID and send digest
+DM_CHANNEL_ID=$(get_dm_channel_id)
+if [ -n "$DM_CHANNEL_ID" ]; then
+    send_digest_to_slack "$DM_CHANNEL_ID" "$HAS_NEW_MESSAGES"
+    echo "Digest sent to user $USER_SLACK_ID via Slack"
 else
-    echo "Error: Could not determine Slack user ID for $USER_EMAIL"
+    echo "Error: Could not determine DM channel for user $USER_SLACK_ID"
 fi
